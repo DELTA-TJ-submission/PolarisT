@@ -51,8 +51,8 @@ PolarisT requires Python 3.10, 3.11 or 3.12. Create a conda environment and inst
 ```bash
 conda create -n polarist python=3.10
 conda activate polarist
-git clone https://github.com/<your-account>/<your-repository>.git
-cd <your-repository>
+git clone https://github.com/DELTA-TJ-submission/PolarisT.git
+cd PolarisT
 pip install .
 ```
 
