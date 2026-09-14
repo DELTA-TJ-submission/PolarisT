@@ -114,15 +114,18 @@ result = rank_unseen_drivers(
 ranking = result.ranking
 print(ranking.head())
 ```
+
 ### Custom phenotype gene sets
 
 PolarisT is trained for CD8⁺ T cells. Users can define custom phenotypes by providing positive and negative gene sets. For a custom gene signature, PolarisT recomputes phenotype-associated cells from the CD8⁺ T-cell expression matrix before ranking atlas-profiled perturbations or atlas-unprofiled genes.
 
-Custom phenotype analysis requires an additional AnnData file, available from the associated Figshare record:
+Custom phenotype analysis requires the CD8⁺ T-cell AnnData file:
 
-[Download the CD8⁺ T-cell AnnData dataset](https://doi.org/10.6084/m9.figshare.32934569)
+[Download Anndata_cd8_raw.h5ad](https://figshare.com/ndownloader/files/66953270)
 
-Download `Anndata_cd8_raw.h5ad` and place it in a local data directory, for example:
+The dataset is also documented in the associated [Figshare record](https://doi.org/10.6084/m9.figshare.32934569).
+
+Save `Anndata_cd8_raw.h5ad` in a local data directory and pass that directory through `resource_dir`.
 
 ```text
 /path/to/polarist_data/Anndata_cd8_raw.h5ad
@@ -160,6 +163,7 @@ adata.var_names
 ```
 
 **Note:** `resource_dir` must point to the directory containing `Anndata_cd8_raw.h5ad`, not to the file itself.
+
 
 ### Perturbation data integration
 
