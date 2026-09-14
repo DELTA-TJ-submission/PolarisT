@@ -23,6 +23,7 @@
 - [Usage](#-usage)
   - [Atlas-profiled perturbation ranking](#atlas-profiled-perturbation-ranking)
   - [Atlas-unprofiled gene ranking](#atlas-unprofiled-gene-ranking)
+  - [Custom phenotype gene sets](#custom-phenotype-gene-sets)
   - [Perturbation data integration](#perturbation-data-integration)
 - [Tutorial](#-tutorial)
 - [Repository Structure](#-repository-structure)
@@ -113,6 +114,52 @@ result = rank_unseen_drivers(
 ranking = result.ranking
 print(ranking.head())
 ```
+### Custom phenotype gene sets
+
+PolarisT is trained for CD8⁺ T cells. Users can define custom phenotypes by providing positive and negative gene sets. For a custom gene signature, PolarisT recomputes phenotype-associated cells from the CD8⁺ T-cell expression matrix before ranking atlas-profiled perturbations or atlas-unprofiled genes.
+
+Custom phenotype analysis requires an additional AnnData file, available from the associated Figshare record:
+
+[Download the CD8⁺ T-cell AnnData dataset](https://doi.org/10.6084/m9.figshare.32934569)
+
+Download `Anndata_cd8_raw.h5ad` and place it in a local data directory, for example:
+
+```text
+/path/to/polarist_data/Anndata_cd8_raw.h5ad
+```
+
+Pass the directory containing this file through `resource_dir`:
+
+```python
+from polarist import rank_seen_drivers
+
+result = rank_seen_drivers(
+    positive_genes=["NKG7", "GZMB", "IFNG"],
+    negative_genes=["TOX", "PDCD1"],
+    phenotype_name="cytotoxicity",
+    extreme_fraction=0.05,
+    refinement_weight=0.9,
+    tf_only=True,
+    resource_dir="/path/to/polarist_data",
+)
+
+ranking = result.ranking
+print(ranking.head())
+```
+
+The same `resource_dir` argument can be used with `rank_unseen_drivers()`.
+
+The AnnData object must contain the following fields:
+
+```python
+adata.layers["logNor"]
+adata.obs["Unique_cellid"]
+adata.obs["Dataset"]
+adata.obs["Immune_type"]
+adata.var_names
+```
+
+**Note:** `resource_dir` must point to the directory containing `Anndata_cd8_raw.h5ad`, not to the file itself.
 
 ### Perturbation data integration
 
