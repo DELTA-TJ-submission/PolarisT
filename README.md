@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/yh-wang1116/PolarisT/blob/main/PolarisT_icon.png">
+  <a href="https://github.com/DELTA-TJ-submission/PolarisT/blob/main/PolarisT_icon.png">
     <img width="150" alt="PolarisT" src="./PolarisT_icon.png" />
   </a>
 </p>
@@ -20,6 +20,8 @@
 
 - [Overview](#-overview)
 - [Installation](#-installation)
+  - [Package installation](#1-package-installation)
+  - [Data preparation](#2-data-preparation)
 - [Usage](#-usage)
   - [Atlas-profiled perturbation ranking](#atlas-profiled-perturbation-ranking)
   - [Atlas-unprofiled gene ranking](#atlas-unprofiled-gene-ranking)
@@ -47,6 +49,8 @@ It contains three related components:
 
 ## 📦 Installation
 
+### 1. Package installation
+
 PolarisT requires Python 3.10, 3.11 or 3.12. Create a conda environment and install the package as follows:
 
 ```bash
@@ -63,7 +67,25 @@ To install the optional tutorial and development dependencies:
 pip install ".[demo,dev]"
 ```
 
-The package includes the pretrained models and compact inference resources required by the released seen and unseen workflows. No large AnnData input is required for the bundled tutorial notebooks.
+The package includes pretrained models and compact inference resources. Complete the data preparation step below before running the ranking workflows or tutorial notebooks.
+
+### 2. Data preparation
+
+Download the CD8⁺ T-cell AnnData file:
+
+[Download Anndata_cd8_raw.h5ad](https://figshare.com/ndownloader/files/66953270)
+
+The dataset is documented in the associated [Figshare record](https://doi.org/10.6084/m9.figshare.32934569).
+
+Save `Anndata_cd8_raw.h5ad` in a local data directory, for example:
+
+```text
+/path/to/polarist_data/Anndata_cd8_raw.h5ad
+```
+
+Use this directory as `resource_dir` in both ranking workflows and tutorial notebooks. Replace `/path/to/polarist_data` in the examples with your actual directory.
+
+**Note:** `resource_dir` must point to the directory containing `Anndata_cd8_raw.h5ad`, not to the file itself.
 
 ---
 
@@ -86,6 +108,7 @@ result = rank_seen_drivers(
     extreme_fraction=0.05,
     refinement_weight=0.9,
     tf_only=True,
+    resource_dir="/path/to/polarist_data",
 )
 
 ranking = result.ranking
@@ -109,6 +132,7 @@ result = rank_unseen_drivers(
     extreme_fraction=0.05,
     n_genes=1000,
     tf_only=True,
+    resource_dir="/path/to/polarist_data",
 )
 
 ranking = result.ranking
@@ -117,21 +141,9 @@ print(ranking.head())
 
 ### Custom phenotype gene sets
 
-PolarisT is trained for CD8⁺ T cells. Users can define custom phenotypes by providing positive and negative gene sets. For a custom gene signature, PolarisT recomputes phenotype-associated cells from the CD8⁺ T-cell expression matrix before ranking atlas-profiled perturbations or atlas-unprofiled genes.
+Users can define custom CD8⁺ T-cell phenotypes by providing their own positive and negative gene sets. Replace the gene sets in either ranking workflow and set `phenotype_name` to a descriptive label. Use the same `resource_dir` configured during data preparation.
 
-Custom phenotype analysis requires the CD8⁺ T-cell AnnData file:
-
-[Download Anndata_cd8_raw.h5ad](https://figshare.com/ndownloader/files/66953270)
-
-The dataset is also documented in the associated [Figshare record](https://doi.org/10.6084/m9.figshare.32934569).
-
-Save `Anndata_cd8_raw.h5ad` in a local data directory and pass that directory through `resource_dir`.
-
-```text
-/path/to/polarist_data/Anndata_cd8_raw.h5ad
-```
-
-Pass the directory containing this file through `resource_dir`:
+For example:
 
 ```python
 from polarist import rank_seen_drivers
@@ -150,20 +162,7 @@ ranking = result.ranking
 print(ranking.head())
 ```
 
-The same `resource_dir` argument can be used with `rank_unseen_drivers()`.
-
-The AnnData object must contain the following fields:
-
-```python
-adata.layers["logNor"]
-adata.obs["Unique_cellid"]
-adata.obs["Dataset"]
-adata.obs["Immune_type"]
-adata.var_names
-```
-
-**Note:** `resource_dir` must point to the directory containing `Anndata_cd8_raw.h5ad`, not to the file itself.
-
+Custom gene sets can also be used with `rank_unseen_drivers()`.
 
 ### Perturbation data integration
 
@@ -181,6 +180,8 @@ The [`Tutorial/`](Tutorial/) directory contains runnable notebooks for both rank
 
 - [Atlas-profiled perturbation ranking](Tutorial/atlas_profiled_driver_demo.ipynb)
 - [Atlas-unprofiled gene ranking](Tutorial/atlas_unprofiled_driver_demo.ipynb)
+
+Before running either notebook, complete [Data preparation](#2-data-preparation) and set `resource_dir` in the notebook to your local data directory.
 
 The accompanying CSV files contain example ranking outputs.
 
