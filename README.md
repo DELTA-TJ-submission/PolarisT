@@ -6,7 +6,7 @@
 
 <h1 align="center">
   Navigating T cell transcriptomic reprogramming by an<br>
-  AI virtual T-cell model PolarisT
+  AI virtual T-cell model
 </h1>
 
 <p align="center">
