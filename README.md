@@ -214,7 +214,7 @@ If you find PolarisT useful for your research, please consider citing our paper:
 
 ```bibtex
 @article{polarist_submitted,
-  title   = {Navigating T cell transcriptomic reprogramming by an AI virtual T-cell model PolarisT},
+  title   = {Navigating T cell transcriptomic reprogramming by an AI virtual T-cell model},
   journal = {Submitted},
   year    = {2026}
 }
